@@ -1,0 +1,26 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }} with node ${{ matrix.node_version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: [6, 8, 10, 12]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          version: ${{ matrix.node_version }}
+
+     - name: npm install and test
+       runs: |
+           npm install
+           npm test
+           npm run cover
